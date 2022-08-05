@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Screen/MainScreen.dart';
 import 'package:flutter_application_1/constants/Colors.dart';
-import 'package:flutter_application_1/screens/Dashboard.dart';
-import 'package:flutter_application_1/screens/Login.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
+
+import 'Screen/DashboardScreen.dart';
+import 'Screen/LoginScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,6 +20,9 @@ class MyApp extends StatelessWidget {
       title: 'Keep Tasks',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        buttonTheme: ButtonThemeData(
+          textTheme: ButtonTextTheme.primary
+        ),
           accentColor: ACCENT_COLOR,
           primaryColor: PRIMARY_COLOR,
           appBarTheme: AppBarTheme(backgroundColor: PRIMARY_COLOR),
@@ -63,18 +68,10 @@ class MyApp extends StatelessWidget {
           )),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              textStyle: MaterialStateProperty.all(
-                TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
+              textStyle: MaterialStateProperty.all(GoogleFonts.mukta()),
             ),
           ),
-          fontFamily: "Arial",
-          textTheme: Theme.of(context)
-              .textTheme
-              .apply(bodyColor: COLOR_TEXT, displayColor: COLOR_TEXT),
+          textTheme: GoogleFonts.muktaTextTheme(),
           colorScheme: ColorScheme.fromSwatch().copyWith(
             secondary: HexColor("#22AA56"),
           ),
@@ -82,7 +79,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => Login(),
-        '/dashboard': (context) => Dashboard()
+        '/dashboard': (context) => MainScreen()
       },
     );
   }

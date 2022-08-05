@@ -56,10 +56,14 @@ class _Login extends State<Login> {
                     children: [
                       Container(
                         margin: EdgeInsets.only(bottom: 20),
-                        child: const Text(
-                          "Salut a vous, Connectez-vous et profitez de la meilleure experience avec Gest",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                        child: const Center(
+                          child: Text(
+                            "Salut a vous, Connectez-vous et profitez de la meilleure experience avec Gest",
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                       Form(

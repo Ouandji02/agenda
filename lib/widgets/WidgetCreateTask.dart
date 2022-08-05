@@ -1,42 +1,56 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/constants/Colors.dart';
+import 'package:flutter_application_1/widgets/Widget_Modal_Form.dart';
 
 class WidgetCreateTask extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      margin: EdgeInsets.only(top: 20, bottom: 20),
-      child: OutlinedButton(
-        onPressed: () {},
-        child: Container(
-          margin: EdgeInsets.only(top: 15, bottom: 15),
-          padding: EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25),
-          alignment: AlignmentDirectional.topStart,
-          decoration:
-              BoxDecoration(color: Theme.of(context).accentColor, boxShadow: [
-            BoxShadow(
-                offset: Offset(0, 5),
-                color: Theme.of(context).primaryColor.withOpacity(.8),
-                blurRadius: 10)
-          ]),
-          child: Column(
+      margin: EdgeInsets.only(top: 20, bottom: 10),
+      child: DottedBorder(
+        color: Colors.black.withOpacity(.4),
+        borderType: BorderType.Rect,
+        strokeWidth: 2,
+        dashPattern: [10, 10, 10, 10],
+        child: OutlinedButton(
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(side: BorderSide.none),
+              ),
+              side: MaterialStateProperty.all(BorderSide.none)),
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) => WidgetModalForm(),
+            );
+          },
+          child: Row(
             children: [
-              Center(
-                child: Icon(
-                  Icons.add,
-                  size: 30,
-                  color: Colors.white,
+              Container(
+                margin: EdgeInsets.only(top: 15, bottom: 15, right: 10),
+                padding:
+                    EdgeInsets.only(top: 15, bottom: 15, left: 25, right: 25),
+                alignment: AlignmentDirectional.topStart,
+                decoration: BoxDecoration(color: Colors.white),
+                child: Center(
+                  child: Icon(
+                    Icons.add,
+                    size: 40,
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
               ),
-              Center(
+              Expanded(
                 child: Text(
-                  "Creer un tache",
+                  "Creer une nouvelle tache",
                   style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
+                    color: COLOR_TEXT.withOpacity(.8),
+                    fontSize: 20,
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ),
