@@ -22,6 +22,7 @@ class _Login extends State<Login> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Connexion"),
+          automaticallyImplyLeading: false,
           elevation: 0,
         ),
         body: SingleChildScrollView(

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/constants/Chips.dart';
-import 'package:flutter_application_1/constants/Colors.dart';
-import 'package:flutter_application_1/widgets/WidgetAppBar.dart';
 import 'package:flutter_application_1/widgets/WidgetCreateTask.dart';
 import 'package:flutter_application_1/widgets/WidgetDrawer.dart';
 import 'package:flutter_application_1/widgets/WidgetTask.dart';
+import 'package:flutter_application_1/widgets/Widget_Search_with_chips.dart';
 
 class Dashboard extends StatefulWidget {
+  const Dashboard({Key? key}) : super(key: key);
+
   @override
   _Dashboard createState() {
     // TODO: implement createState
@@ -15,7 +16,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _Dashboard extends State<Dashboard> {
-  String? selectChips = "Mercredi";
+  String selectChips = "Mercredi";
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +25,12 @@ class _Dashboard extends State<Dashboard> {
       drawer: GlobalDrawer(),
       body: Container(
         alignment: AlignmentDirectional.topStart,
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             WidgetCreateTask(),
             Container(
-              margin: EdgeInsets.only(top: 10, bottom: 10),
+              margin: const EdgeInsets.only(top: 10, bottom: 10),
               alignment: AlignmentDirectional.topStart,
               child: const Text(
                 "Taches",
@@ -40,31 +41,9 @@ class _Dashboard extends State<Dashboard> {
               height: 50,
               child: ListView.builder(
                 itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: ChoiceChip(
-                      onSelected: (onSelcted) {
-                        setState(() {
-                          selectChips = CHIPS_LIST[index];
-                        });
-                      },
-                      label: Text(CHIPS_LIST[index]),
-                      backgroundColor: Colors.white,
-                      selected: CHIPS_LIST[index] == selectChips,
-                      elevation: 3,
-                      labelStyle: TextStyle(
-                          color: CHIPS_LIST[index] == selectChips
-                              ? Colors.white
-                              : COLOR_TEXT,
-                          fontSize: 18),
-                      disabledColor: Colors.white,
-                      selectedColor: Theme.of(context).primaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: EdgeInsets.all(5),
-                    ),
-                  );
+                  print(selectChips);
+                  return WidgetSearchWithChips(
+                      selectChips: selectChips, index: index);
                 },
                 itemCount: CHIPS_LIST.length,
                 scrollDirection: Axis.horizontal,

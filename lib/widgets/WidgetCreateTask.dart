@@ -23,6 +23,9 @@ class WidgetCreateTask extends StatelessWidget {
           onPressed: () {
             showModalBottomSheet(
               context: context,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15)
+              ),
               builder: (context) => WidgetModalForm(),
             );
           },

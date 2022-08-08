@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Screen/DetailTaskScreen.dart';
 import 'package:flutter_application_1/Screen/MainScreen.dart';
+import 'package:flutter_application_1/Screen/FirstScreen.dart';
 import 'package:flutter_application_1/constants/Colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
-
-import 'Screen/DashboardScreen.dart';
 import 'Screen/LoginScreen.dart';
 
 void main() {
@@ -20,67 +20,88 @@ class MyApp extends StatelessWidget {
       title: 'Keep Tasks',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        buttonTheme: ButtonThemeData(
-          textTheme: ButtonTextTheme.primary
-        ),
+          buttonTheme:
+              const ButtonThemeData(textTheme: ButtonTextTheme.primary),
           accentColor: ACCENT_COLOR,
           primaryColor: PRIMARY_COLOR,
           appBarTheme: AppBarTheme(backgroundColor: PRIMARY_COLOR),
-          inputDecorationTheme: InputDecorationTheme(
-              fillColor: PRIMARY_COLOR.withOpacity(.15),
-              filled: true,
-              labelStyle: TextStyle(
-                color: Colors.black38,
-              ),
-              contentPadding: const EdgeInsets.all(2),
-              border: OutlineInputBorder(),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide:
-                      BorderSide(color: PRIMARY_COLOR.withOpacity(.01))),
-              focusColor: Colors.black38,
-              iconColor: Colors.black38,
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.black38,
-                ),
-              )),
+          inputDecorationTheme: inputDecorationTheme(),
           scaffoldBackgroundColor: HexColor("#EBF9EA"),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(
-                ACCENT_COLOR,
-              ),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
-          ),
-          outlinedButtonTheme: OutlinedButtonThemeData(
-              style: ButtonStyle(
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-            ),
-          )),
+          elevatedButtonTheme: elevatedButtonThemeData(),
+          outlinedButtonTheme: outlinedButtonThemeData(),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
               textStyle: MaterialStateProperty.all(GoogleFonts.mukta()),
             ),
           ),
-          textTheme: GoogleFonts.muktaTextTheme(),
+          textTheme: textTheme(context),
           colorScheme: ColorScheme.fromSwatch().copyWith(
             secondary: HexColor("#22AA56"),
           ),
           drawerTheme: DrawerThemeData(backgroundColor: HexColor("#EBF9EA"))),
       initialRoute: '/',
       routes: {
-        '/': (context) => Login(),
-        '/dashboard': (context) => MainScreen()
+        '/':(context) => FirstScreen(),
+        '/login': (context) => Login(),
+        '/dashboard': (context) => MainScreen(),
+        '/details': (context) => DetailTaskScreen()
       },
     );
   }
 }
+
+InputDecorationTheme inputDecorationTheme() => InputDecorationTheme(
+      fillColor: PRIMARY_COLOR.withOpacity(.15),
+      filled: true,
+      labelStyle: const TextStyle(
+        color: Colors.black38,
+      ),
+      contentPadding: const EdgeInsets.all(2),
+      border: const OutlineInputBorder(),
+      enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(color: PRIMARY_COLOR.withOpacity(.01))),
+      focusColor: Colors.black38,
+      iconColor: Colors.black38,
+      focusedBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.black38,
+        ),
+      ),
+    );
+
+ElevatedButtonThemeData elevatedButtonThemeData() => ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(
+          ACCENT_COLOR,
+        ),
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+      ),
+    );
+
+OutlinedButtonThemeData outlinedButtonThemeData() => OutlinedButtonThemeData(
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+      ),
+    );
+
+TextTheme textTheme(BuildContext context) =>
+    GoogleFonts.muktaTextTheme().copyWith(
+      subtitle2: TextStyle(
+        color: Theme.of(context).textTheme.subtitle2?.color?.withOpacity(.5),
+      ),
+      headline4: TextStyle(
+        color: Colors.white
+      ),
+      subtitle1: TextStyle(
+        fontWeight: FontWeight.bold
+      ),
+    );
