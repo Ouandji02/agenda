@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../constants/Chips.dart';
 import '../constants/Colors.dart';
+import '../functions/filterTask.dart';
 import '../widgets/WidgetTask.dart';
 import '../widgets/Widget_Search_with_chips.dart';
 
@@ -15,11 +16,17 @@ class TaskScreen extends StatefulWidget {
 }
 
 class _TaskScreenState extends State<TaskScreen> {
-  String? selectChips = "Mercredi";
+  String? selectChips = "Tout";
+  String? selectValue = 'Tout';
+  List<DropdownMenuItem<String>> menuItems = [
+    DropdownMenuItem(child: Text("Tout"), value: "Tout"),
+    DropdownMenuItem(child: Text("A faire"), value: "A faire"),
+    DropdownMenuItem(child: Text("En cours"), value: "En cours"),
+    DropdownMenuItem(child: Text("Termine"), value: "Termine"),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     return Container(
       padding: EdgeInsets.all(20),
       child: Column(
@@ -59,21 +66,46 @@ class _TaskScreenState extends State<TaskScreen> {
               scrollDirection: Axis.horizontal,
             ),
           ),
-          Container(
+          /*Container(
             padding: EdgeInsets.only(top: 10, bottom: 10),
             child: Row(
-              children: [Text("Rechercher par statut :"), Text("Termine")],
+              children: [
+                Text("Rechercher par statut :"),
+                Container(
+                  margin: EdgeInsets.only(left: 20),
+                  child: DropdownButton(
+                    items: menuItems,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectValue = newValue;
+                      });
+                    },
+                    value: selectValue,
+                  ),
+                )
+
+              ],
             ),
-          ),
+          ),*/
           Expanded(
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                return WidgetTask(
-                  index: index,
-                );
-              },
-              itemCount: taskProvider.task.length,
-            ),
+            child: filterTask(selectChips, context.watch<TaskProvider>().task,
+                            context)
+                        .length !=
+                    0
+                ? ListView.builder(
+                    itemBuilder: (context, index) {
+                      return WidgetTask(
+                        index: index,
+                        selectChips: selectChips,
+                      );
+                    },
+                    itemCount: filterTask(selectChips,
+                            context.watch<TaskProvider>().task, context)
+                        .length,
+                  )
+                : Center(
+                    child: Text("Aucune Tache pour le moment"),
+                  ),
           ),
         ],
       ),

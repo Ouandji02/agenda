@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/modeles/Task.dart';
 import 'package:flutter_application_1/provider/Task_Provider.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class WidgetModalForm extends StatefulWidget {
@@ -156,12 +157,16 @@ class _WidgetModalFormState extends State<WidgetModalForm> {
                               if (_formKey.currentState!.validate() &&
                                   endDateController != null &&
                                   beginDateController != null) {
-                                taskProvidder.setTask(Task(
+                                taskProvidder.setTask(
+                                  Task(
                                     title: taskController.text,
                                     dateBegin: beginDateController,
                                     dateEnd: endDateController,
                                     message: descriptionController.text,
-                                    dateTime: DateTime.now()));
+                                    dateSave: DateFormat("EEEE dd MMMM yyyy")
+                                        .format(DateTime.now()),
+                                  ),
+                                );
                                 Navigator.pop(context);
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(

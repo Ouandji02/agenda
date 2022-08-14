@@ -1,33 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/provider/Task_Provider.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../functions/filterTask.dart';
 import '../functions/manageTime.dart';
 import '../modeles/Task.dart';
 
 class WidgetTask extends StatefulWidget {
   int? index;
+  String? selectChips;
 
-  WidgetTask({required this.index});
+  WidgetTask({required this.index, required this.selectChips});
 
   @override
   _WidgetTask createState() {
     // TODO: implement createState
-    return _WidgetTask(index: index);
+    return _WidgetTask(
+      index: index,
+      selectChips: selectChips,
+    );
   }
 }
 
 class _WidgetTask extends State<WidgetTask> {
   int? index;
+  String? selectChips;
 
-  _WidgetTask({required this.index});
+  _WidgetTask({required this.index, required this.selectChips});
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     Size size = MediaQuery.of(context).size;
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
-    Task indexTask = context.watch<TaskProvider>().task[index!];
+    Task? indexTask = filterTask(
+        selectChips, context.watch<TaskProvider>().task, context)[index!];
+    ;
     return InkWell(
       onTap: () =>
           Navigator.pushNamed(context, "/details", arguments: indexTask),
@@ -73,7 +82,7 @@ class _WidgetTask extends State<WidgetTask> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          indexTask.title.toString(),
+                          indexTask!.title.toString(),
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         Container(
@@ -122,8 +131,7 @@ class _WidgetTask extends State<WidgetTask> {
                                 child: Row(
                                   children: [
                                     Icon(Icons.date_range_outlined),
-                                    Text(
-                                        "${(indexTask.dateTime.day.toString() + "/" + indexTask.dateTime.month.toString() + "/" + indexTask.dateTime.year.toString())}",
+                                    Text("${indexTask.dateSave}",
                                         style: Theme.of(context)
                                             .textTheme
                                             .subtitle2),
@@ -169,5 +177,3 @@ class _WidgetTask extends State<WidgetTask> {
     );
   }
 }
-
-

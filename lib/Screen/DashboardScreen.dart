@@ -5,9 +5,11 @@ import 'package:flutter_application_1/widgets/WidgetCreateTask.dart';
 import 'package:flutter_application_1/widgets/WidgetDrawer.dart';
 import 'package:flutter_application_1/widgets/WidgetTask.dart';
 import 'package:flutter_application_1/widgets/Widget_Search_with_chips.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/Colors.dart';
+import '../functions/filterTask.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -20,7 +22,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _Dashboard extends State<Dashboard> {
-  String selectChips = "Mercredi";
+  String selectChips = "Tout";
 
   @override
   Widget build(BuildContext context) {
@@ -78,14 +80,24 @@ class _Dashboard extends State<Dashboard> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return WidgetTask(
-                    index: index,
-                  );
-                },
-                itemCount: context.watch<TaskProvider>().task.length,
-              ),
+              child: filterTask(selectChips, context.watch<TaskProvider>().task,
+                              context)
+                          .length !=
+                      0
+                  ? ListView.builder(
+                      itemBuilder: (context, index) {
+                        return WidgetTask(
+                          index: index,
+                          selectChips: selectChips,
+                        );
+                      },
+                      itemCount: filterTask(selectChips,
+                              context.watch<TaskProvider>().task, context)
+                          .length,
+                    )
+                  : Center(
+                      child: Text("Aucune Tache pour le moment"),
+                    ),
             ),
           ],
         ),
