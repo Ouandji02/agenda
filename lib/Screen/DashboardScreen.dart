@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/constants/Chips.dart';
+import 'package:flutter_application_1/provider/Task_Provider.dart';
 import 'package:flutter_application_1/widgets/WidgetCreateTask.dart';
 import 'package:flutter_application_1/widgets/WidgetDrawer.dart';
 import 'package:flutter_application_1/widgets/WidgetTask.dart';
 import 'package:flutter_application_1/widgets/Widget_Search_with_chips.dart';
+import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -21,6 +23,7 @@ class _Dashboard extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     return Scaffold(
       drawer: GlobalDrawer(),
       body: Container(
@@ -52,9 +55,11 @@ class _Dashboard extends State<Dashboard> {
             Expanded(
               child: ListView.builder(
                 itemBuilder: (context, index) {
-                  return WidgetTask();
+                  return WidgetTask(
+                    index: index,
+                  );
                 },
-                itemCount: 3,
+                itemCount: taskProvider.task.length,
               ),
             ),
           ],

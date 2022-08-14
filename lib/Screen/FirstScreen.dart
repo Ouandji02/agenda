@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/widgets/Widget_Text_First_Screen.dart';
 
+import '../constants/PageView.dart';
+import '../widgets/Widget_Indicator.dart';
+
 class FirstScreen extends StatefulWidget {
   const FirstScreen({Key? key}) : super(key: key);
 
@@ -9,6 +12,8 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
+  int isSelected = 0;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -22,30 +27,18 @@ class _FirstScreenState extends State<FirstScreen> {
             child: Center(
               child: Column(
                 children: [
-                  TabBarView(
-                    children: [
-                      WidgetTextFirstScreen(
-                        description:
-                        "Gest un gestionnaire dans lequel on enregistre ces taches pour une meilleure organisation ",
-                        title: "C'est quoi Gest ? ",
-                      ),
-                      WidgetTextFirstScreen(
-                        description:
-                        "Grace a cela vous pourrez verifier vos taches quelque soit l'appareil pres de vous et votre position ",
-                        title:
-                        'Conservez vos taches en ligne a chaque instant',
-                      ),
-                      WidgetTextFirstScreen(
-                        description:
-                        "Grace a cela vous pourrez verifier vos taches quelque soit l'appareil pres de vous et votre position ",
-                        title:
-                        'Conservez vos taches en ligne a chaque instant',
-                      ),
-                    ],
+                  Container(
+                    margin: EdgeInsets.only(bottom: 5),
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage("assets/images/note1.png"),
+                            fit: BoxFit.cover)),
+                    height: MediaQuery.of(context).size.height * .55,
+                    width: MediaQuery.of(context).size.height * .7,
                   ),
                   Container(
                     padding: EdgeInsets.all(20),
-                    constraints: BoxConstraints(minHeight: size.height * .35),
+                    constraints: BoxConstraints(minHeight: size.height * .4),
                     decoration: BoxDecoration(
                       color: Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: BorderRadius.only(
@@ -57,22 +50,52 @@ class _FirstScreenState extends State<FirstScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            ...List.generate(
+                              tabs.length,
+                              (index) => Indicator(
+                                  isActive: isSelected == index ? true : false),
+                            )
+                          ],
                         ),
-                        InkWell(
-                          onTap: () => Navigator.pushNamed(context, '/login'),
-                          child: Container(
-                            margin: EdgeInsets.only(top: 20),
-                            child: CircleAvatar(
-                              radius: 25,
-                              backgroundColor: Theme.of(context).primaryColor,
-                              child: Icon(
-                                Icons.arrow_forward,
-                                size: 40,
+                        Container(
+                          height: size.height * .2,
+                          child: PageView.builder(
+                            onPageChanged: (index) {
+                              setState(() {
+                                isSelected = index;
+                              });
+                            },
+                            itemBuilder: (context, index) {
+                              return tabs[index];
+                            },
+                            itemCount: tabs.length,
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 10),
+                          alignment: AlignmentDirectional.center,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              textStyle: MaterialStateProperty.all(
+                                const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              minimumSize: MaterialStateProperty.all(
+                                Size(size.width * .3, 45),
                               ),
                             ),
+                            onPressed: () =>
+                                Navigator.pushNamed(context, '/login'),
+                            child: Text(
+                              "Suivant",
+                              style: TextStyle(fontSize: 17),
+                            ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   )

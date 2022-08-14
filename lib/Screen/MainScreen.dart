@@ -25,19 +25,35 @@ class _MainScreen extends State<MainScreen> {
           elevation: 0,
           actions: [
             IconButton(
-              onPressed: null,
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: CustomSearch(),
+                );
+              },
               icon: Icon(
                 Icons.search,
                 color: Colors.white,
               ),
             ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.more_vert_outlined,
-                color: Colors.white,
-              ),
-            ),
+            PopupMenuButton(
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.logout,
+                        color: Colors.black,
+                      ),
+                      const SizedBox(
+                        width: 12.0,
+                      ),
+                      Text("Deconnexion")
+                    ],
+                  ),
+                ),
+              ],
+            )
           ],
           title: Text(
             "Gest",
@@ -66,5 +82,39 @@ class _MainScreen extends State<MainScreen> {
         ),
       ),
     );
+  }
+}
+
+class CustomSearch extends SearchDelegate {
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    // TODO: implement buildActions
+    return [
+      IconButton(
+        onPressed: () => close(context, null),
+        icon: Icon(Icons.clear),
+      )
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    // TODO: implement buildLeading
+    return IconButton(
+      onPressed: () => close(context, null),
+      icon: Icon(Icons.arrow_back),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    return Text("data");
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // TODO: implement buildSuggestions
+    return Text("data");
   }
 }

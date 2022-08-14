@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/constants/Colors.dart';
+import 'package:flutter_application_1/modeles/User.dart';
+import 'package:flutter_application_1/provider/user_provider.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -19,6 +22,7 @@ class _Login extends State<Login> {
   Widget build(BuildContext context) {
     // TODO: implement build
     Size size = MediaQuery.of(context).size;
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
           title: Text("Connexion"),
@@ -124,9 +128,14 @@ class _Login extends State<Login> {
                                 ),
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
-                                    Navigator.pushNamed(context, '/dashboard');
-                                    print(emailController.text +
-                                        passwordController.text);
+                                    userProvider.setUser(
+                                        User(email: emailController.text));
+                                    print(
+                                        "userrrrrrrrrrrrrr ${userProvider.user?.email}");
+                                    if (userProvider.user?.email != null) {
+                                      Navigator.pushNamed(
+                                          context, '/dashboard');
+                                    }
                                   }
                                 },
                                 child: Text(

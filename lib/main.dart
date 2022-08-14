@@ -3,12 +3,21 @@ import 'package:flutter_application_1/Screen/DetailTaskScreen.dart';
 import 'package:flutter_application_1/Screen/MainScreen.dart';
 import 'package:flutter_application_1/Screen/FirstScreen.dart';
 import 'package:flutter_application_1/constants/Colors.dart';
+import 'package:flutter_application_1/provider/Task_Provider.dart';
+import 'package:flutter_application_1/provider/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
 import 'Screen/LoginScreen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => UserProvider()),
+      ChangeNotifierProvider(create: (_) => TaskProvider())
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -41,7 +50,7 @@ class MyApp extends StatelessWidget {
           drawerTheme: DrawerThemeData(backgroundColor: HexColor("#EBF9EA"))),
       initialRoute: '/',
       routes: {
-        '/':(context) => FirstScreen(),
+        '/': (context) => FirstScreen(),
         '/login': (context) => Login(),
         '/dashboard': (context) => MainScreen(),
         '/details': (context) => DetailTaskScreen()
@@ -98,10 +107,6 @@ TextTheme textTheme(BuildContext context) =>
       subtitle2: TextStyle(
         color: Theme.of(context).textTheme.subtitle2?.color?.withOpacity(.5),
       ),
-      headline4: TextStyle(
-        color: Colors.white
-      ),
-      subtitle1: TextStyle(
-        fontWeight: FontWeight.bold
-      ),
+      headline4: TextStyle(color: Colors.white),
+      subtitle1: TextStyle(fontWeight: FontWeight.bold),
     );

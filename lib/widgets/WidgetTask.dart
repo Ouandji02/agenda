@@ -1,18 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/provider/Task_Provider.dart';
+import 'package:provider/provider.dart';
+
+import '../modeles/Task.dart';
 
 class WidgetTask extends StatefulWidget {
+  int? index;
+
+  WidgetTask({required this.index});
+
   @override
   _WidgetTask createState() {
     // TODO: implement createState
-    return _WidgetTask();
+    return _WidgetTask(index: index);
   }
 }
 
 class _WidgetTask extends State<WidgetTask> {
+  int? index;
+
+  _WidgetTask({required this.index});
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     Size size = MediaQuery.of(context).size;
+    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
+    Task indexTask = taskProvider.task[index!];
     return InkWell(
       onTap: () => Navigator.pushNamed(context, "/details"),
       child: Container(
@@ -41,7 +55,11 @@ class _WidgetTask extends State<WidgetTask> {
                   Container(
                     child: CircleAvatar(
                       backgroundColor: Theme.of(context).primaryColor,
-                      child: Text("F"),
+                      child: Text(
+                        taskProvider.task[this.index!].title
+                            .toString()
+                            .substring(0, 2),
+                      ),
                     ),
                   ),
                   Container(
@@ -53,19 +71,21 @@ class _WidgetTask extends State<WidgetTask> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Titre de la tache",
+                          indexTask.title.toString(),
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         Container(
-                          width: size.width * .7,
+                          width: size.width * .65,
                           child: Row(
                             children: [
                               Text(
-                                "En cours",
+                                getStatus(indexTask.dateBegin, TimeOfDay.now(),
+                                    indexTask.dateEnd),
                                 style: Theme.of(context).textTheme.subtitle2,
                               ),
                               Spacer(),
-                              Text("18h - 20h",
+                              Text(
+                                  "${(indexTask.dateBegin!.hour.toString() + ":" + indexTask.dateBegin!.minute.toString()).toString()} - ${(indexTask.dateEnd!.hour.toString() + ":" + indexTask.dateEnd!.minute.toString())}",
                                   style: Theme.of(context).textTheme.subtitle2)
                             ],
                           ),
@@ -78,17 +98,20 @@ class _WidgetTask extends State<WidgetTask> {
                                 blurRadius: 20)
                           ]),
                           margin: EdgeInsets.only(top: 10, bottom: 10),
-                          width: size.width * .7,
+                          width: size.width * .65,
                           height: 5,
                           child: LinearProgressIndicator(
                             backgroundColor: Colors.black.withOpacity(.4),
                             valueColor: new AlwaysStoppedAnimation<Color>(
                                 Theme.of(context).primaryColor),
-                            value: 0.6,
+                            value: (getDiffHours(
+                                    indexTask.dateEnd, TimeOfDay.now()) /
+                                getDiffHours(
+                                    indexTask.dateEnd, indexTask.dateBegin)),
                           ),
                         ),
                         Container(
-                          width: size.width * .7,
+                          width: size.width * .65,
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -97,7 +120,8 @@ class _WidgetTask extends State<WidgetTask> {
                                 child: Row(
                                   children: [
                                     Icon(Icons.date_range_outlined),
-                                    Text("Mer 22 jan 2022",
+                                    Text(
+                                        "${(indexTask.dateTime.day.toString() + "/" + indexTask.dateTime.month.toString() + "/" + indexTask.dateTime.year.toString())}",
                                         style: Theme.of(context)
                                             .textTheme
                                             .subtitle2),
@@ -105,7 +129,7 @@ class _WidgetTask extends State<WidgetTask> {
                                 ),
                               ),
                               Text(
-                                "60%",
+                                "${((getDiffHours(indexTask.dateEnd, TimeOfDay.now()) / getDiffHours(indexTask.dateEnd, indexTask.dateBegin)) * 100).truncate()} %",
                                 style: TextStyle(
                                     fontSize: 17,
                                     color: Theme.of(context).accentColor),
@@ -142,4 +166,14 @@ class _WidgetTask extends State<WidgetTask> {
       ),
     );
   }
+}
+
+int getDiffHours(TimeOfDay? time1, TimeOfDay? time2) {
+  return (time1!.hour * 60 + time1.minute) - (time2!.hour * 60 + time2.minute);
+}
+
+String getStatus(TimeOfDay? time1, TimeOfDay? time2, TimeOfDay? time3) {
+  if (getDiffHours(time1, time2) > 0) return 'A faire';
+  if (getDiffHours(time3, time2) < 0) return 'Termine';
+  return "En cours";
 }

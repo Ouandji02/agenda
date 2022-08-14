@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/modeles/Task.dart';
+import 'package:flutter_application_1/provider/Task_Provider.dart';
+import 'package:provider/provider.dart';
 
 class WidgetModalForm extends StatefulWidget {
   const WidgetModalForm({Key? key}) : super(key: key);
@@ -10,14 +13,15 @@ class WidgetModalForm extends StatefulWidget {
 class _WidgetModalFormState extends State<WidgetModalForm> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController taskController = TextEditingController();
-  TextEditingController beginDateController = TextEditingController();
-  TextEditingController endDateController = TextEditingController();
+  TimeOfDay? beginDateController;
+  TimeOfDay? endDateController;
   TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     Size size = MediaQuery.of(context).size;
+    final taskProvidder = Provider.of<TaskProvider>(context, listen: false);
     return SingleChildScrollView(
       child: Container(
         decoration: BoxDecoration(
@@ -70,15 +74,24 @@ class _WidgetModalFormState extends State<WidgetModalForm> {
                         Container(
                           margin: const EdgeInsets.only(top: 10, bottom: 15),
                           child: TextFormField(
-                            controller: beginDateController,
+                            onTap: () async {
+                              TimeOfDay? pickedTime = await showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay(hour: 0, minute: 0));
+                              print("sdffffffffffffff ${pickedTime}");
+                              setState(() {
+                                beginDateController = pickedTime!;
+                              });
+                            },
                             keyboardType: TextInputType.datetime,
-                            decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.hourglass_top_outlined),
-                              hintText: "Entrez l'heure de debut",
-                              labelText: "Heure de debut",
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.access_time_outlined),
+                              hintText: beginDateController != null
+                                  ? "${beginDateController!.hour}:${beginDateController!.minute}"
+                                  : "00:00",
                             ),
                             validator: (value) {
-                              if (value!.isEmpty) {
+                              if (beginDateController == null) {
                                 return "s'il vous plait entrez l'heure";
                               }
                               return null;
@@ -88,15 +101,24 @@ class _WidgetModalFormState extends State<WidgetModalForm> {
                         Container(
                           margin: const EdgeInsets.only(top: 10, bottom: 15),
                           child: TextFormField(
-                            controller: endDateController,
+                            onTap: () async {
+                              TimeOfDay? pickedTime = await showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay(hour: 0, minute: 0));
+                              print("sdffffffffffffff ${pickedTime}");
+                              setState(() {
+                                endDateController = pickedTime;
+                              });
+                            },
                             keyboardType: TextInputType.datetime,
-                            decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.hourglass_bottom_outlined),
-                              hintText: "Entrer l'heure de fin",
-                              labelText: "Heure de fin",
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.timer_off_sharp),
+                              hintText: endDateController != null
+                                  ? "${endDateController!.hour}:${endDateController!.minute}"
+                                  : "00:00",
                             ),
                             validator: (value) {
-                              if (value!.isEmpty) {
+                              if (endDateController == null) {
                                 return "s'il vous plait entrez l'heure";
                               }
                               return null;
@@ -131,10 +153,21 @@ class _WidgetModalFormState extends State<WidgetModalForm> {
                               ),
                             ),
                             onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                Navigator.pushNamed(context, '/dashboard');
-                                print(taskController.text +
-                                    beginDateController.text);
+                              if (_formKey.currentState!.validate() &&
+                                  endDateController != null &&
+                                  beginDateController != null) {
+                                taskProvidder.setTask(Task(
+                                    title: taskController.text,
+                                    dateBegin: beginDateController,
+                                    dateEnd: endDateController,
+                                    message: descriptionController.text,
+                                    dateTime: DateTime.now()));
+
+                                var sn = SnackBar(
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                  content: Text("tache creee"),
+                                );
                               }
                             },
                             child: const Text(
