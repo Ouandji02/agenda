@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/modeles/Task.dart';
 import 'package:flutter_application_1/widgets/Widget_Status_Task.dart';
 import 'package:flutter_application_1/widgets/Widget_detail_Task.dart';
 
+import '../functions/manageTime.dart';
 import '../widgets/Widget_Modal_Form.dart';
 
 class DetailTaskScreen extends StatefulWidget {
@@ -15,6 +17,7 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final args = ModalRoute.of(context)!.settings.arguments as Task;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -71,13 +74,15 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
                 top: size.height * .15,
                 left: size.width * .07,
                 right: size.width * .07,
-                child: WidgetDetailTask(),
+                child: WidgetDetailTask(
+                  task: args,
+                ),
               ),
               Positioned(
                 top: size.height * .1,
                 left: size.width * .4,
                 child: Icon(
-                  Icons.check_circle,
+                  getIcon(TimeOfDay.now(), args.dateBegin, args.dateEnd),
                   color: Colors.white,
                   size: size.width * .2,
                   shadows: [

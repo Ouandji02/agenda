@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../functions/manageTime.dart';
+import '../modeles/Task.dart';
+
 class WidgetDetailTask extends StatelessWidget {
-  const WidgetDetailTask({Key? key}) : super(key: key);
+  Task? task;
+
+  WidgetDetailTask({required this.task});
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +42,11 @@ class WidgetDetailTask extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Titre de la tache",
+                      task!.title,
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     Text(
-                      "Commence a 18h",
+                      "Commence a ${task!.dateBegin!.hour}h : ${task!.dateBegin!.minute}mn",
                       style: Theme.of(context).textTheme.subtitle2,
                     )
                   ],
@@ -75,8 +80,7 @@ class WidgetDetailTask extends StatelessWidget {
             ),
           ),
           Container(
-            child: Text(
-                "Le lorem ipsum est, en imprimerie, une suite de mots sans signification utilisée à titre provisoire pour calibrer une mise en page, le texte définitif venant remplacer le faux-texte dès qu'il est prêt ou que la mise en page est achevée., le Lorem ipsum ou Lipsum."),
+            child: Text(task!.message as String),
           ),
           Container(
             decoration: BoxDecoration(
@@ -95,7 +99,8 @@ class WidgetDetailTask extends StatelessWidget {
               backgroundColor: Colors.black.withOpacity(.4),
               valueColor: new AlwaysStoppedAnimation<Color>(
                   Theme.of(context).primaryColor),
-              value: 0.6,
+              value: (getDiffHours(TimeOfDay.now(), task!.dateBegin) /
+                  getDiffHours(task!.dateEnd, task!.dateBegin)),
             ),
           ),
           Container(
@@ -106,7 +111,7 @@ class WidgetDetailTask extends StatelessWidget {
               children: [
                 Text("0%"),
                 Text(
-                  "60%",
+                  "${getPercent(TimeOfDay.now(), task!.dateBegin, task!.dateEnd)} %",
                   style: TextStyle(color: Theme.of(context).primaryColor),
                 )
               ],
@@ -142,7 +147,7 @@ class WidgetDetailTask extends StatelessWidget {
                               style: Theme.of(context).textTheme.subtitle2,
                             ),
                             Text(
-                              "18h00",
+                              "${task!.dateBegin!.hour}h : ${task!.dateBegin!.minute}mn",
                               style: Theme.of(context).textTheme.subtitle1,
                             )
                           ],
@@ -178,7 +183,7 @@ class WidgetDetailTask extends StatelessWidget {
                               style: Theme.of(context).textTheme.subtitle2,
                             ),
                             Text(
-                              "18h00",
+                              "${task!.dateEnd!.hour}h : ${task!.dateEnd!.minute}mn",
                               style: Theme.of(context).textTheme.subtitle1,
                             )
                           ],

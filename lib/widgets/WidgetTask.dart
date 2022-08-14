@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/provider/Task_Provider.dart';
 import 'package:provider/provider.dart';
 
+import '../functions/manageTime.dart';
 import '../modeles/Task.dart';
 
 class WidgetTask extends StatefulWidget {
@@ -26,9 +27,10 @@ class _WidgetTask extends State<WidgetTask> {
     // TODO: implement build
     Size size = MediaQuery.of(context).size;
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
-    Task indexTask = taskProvider.task[index!];
+    Task indexTask = context.watch<TaskProvider>().task[index!];
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, "/details"),
+      onTap: () =>
+          Navigator.pushNamed(context, "/details", arguments: indexTask),
       child: Container(
         margin: EdgeInsets.only(top: 10),
         child: Stack(
@@ -105,7 +107,7 @@ class _WidgetTask extends State<WidgetTask> {
                             valueColor: new AlwaysStoppedAnimation<Color>(
                                 Theme.of(context).primaryColor),
                             value: (getDiffHours(
-                                    indexTask.dateEnd, TimeOfDay.now()) /
+                                    TimeOfDay.now(), indexTask.dateBegin) /
                                 getDiffHours(
                                     indexTask.dateEnd, indexTask.dateBegin)),
                           ),
@@ -129,7 +131,7 @@ class _WidgetTask extends State<WidgetTask> {
                                 ),
                               ),
                               Text(
-                                "${((getDiffHours(indexTask.dateEnd, TimeOfDay.now()) / getDiffHours(indexTask.dateEnd, indexTask.dateBegin)) * 100).truncate()} %",
+                                "${getPercent(TimeOfDay.now(), indexTask.dateBegin, indexTask.dateEnd)} %",
                                 style: TextStyle(
                                     fontSize: 17,
                                     color: Theme.of(context).accentColor),
@@ -168,12 +170,4 @@ class _WidgetTask extends State<WidgetTask> {
   }
 }
 
-int getDiffHours(TimeOfDay? time1, TimeOfDay? time2) {
-  return (time1!.hour * 60 + time1.minute) - (time2!.hour * 60 + time2.minute);
-}
 
-String getStatus(TimeOfDay? time1, TimeOfDay? time2, TimeOfDay? time3) {
-  if (getDiffHours(time1, time2) > 0) return 'A faire';
-  if (getDiffHours(time3, time2) < 0) return 'Termine';
-  return "En cours";
-}

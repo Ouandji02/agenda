@@ -162,12 +162,13 @@ class _WidgetModalFormState extends State<WidgetModalForm> {
                                     dateEnd: endDateController,
                                     message: descriptionController.text,
                                     dateTime: DateTime.now()));
-
-                                var sn = SnackBar(
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
                                   backgroundColor:
                                       Theme.of(context).primaryColor,
                                   content: Text("tache creee"),
-                                );
+                                ));
                               }
                             },
                             child: const Text(
