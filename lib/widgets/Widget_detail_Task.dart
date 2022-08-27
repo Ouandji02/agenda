@@ -11,6 +11,16 @@ class WidgetDetailTask extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final hourBegin = task!.dateBegin!.split(":")![0];
+    final minBegin = task!.dateBegin!.split(":")![1];
+    final hourEnd = task!.dateEnd!.split(":")![0];
+    final minEnd = task!.dateEnd!.split(":")![1];
+    final timeBegin = TimeOfDay(
+      hour: int.parse(hourBegin),
+      minute: int.parse(minBegin),
+    );
+    final timeEnd =
+        TimeOfDay(hour: int.parse(hourEnd), minute: int.parse(minEnd));
     return Container(
       height: size.height * .56,
       width: size.width * .95,
@@ -46,7 +56,7 @@ class WidgetDetailTask extends StatelessWidget {
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     Text(
-                      "Commence a ${task!.dateBegin!.hour}h : ${task!.dateBegin!.minute}mn",
+                      "Commence a ${task!.dateBegin!.split(":")[0]}h : ${task!.dateBegin!.split(":")[1]}mn",
                       style: Theme.of(context).textTheme.subtitle2,
                     )
                   ],
@@ -99,8 +109,8 @@ class WidgetDetailTask extends StatelessWidget {
               backgroundColor: Colors.black.withOpacity(.4),
               valueColor: new AlwaysStoppedAnimation<Color>(
                   Theme.of(context).primaryColor),
-              value: (getDiffHours(TimeOfDay.now(), task!.dateBegin) /
-                  getDiffHours(task!.dateEnd, task!.dateBegin)),
+              value: (getDiffHours(TimeOfDay.now(), timeBegin) /
+                  getDiffHours(timeEnd, timeBegin)),
             ),
           ),
           Container(
@@ -111,7 +121,7 @@ class WidgetDetailTask extends StatelessWidget {
               children: [
                 Text("0%"),
                 Text(
-                  "${getPercent(TimeOfDay.now(), task!.dateBegin, task!.dateEnd)} %",
+                  "${getPercent(TimeOfDay.now(), timeBegin, timeEnd)} %",
                   style: TextStyle(color: Theme.of(context).primaryColor),
                 )
               ],
@@ -147,7 +157,7 @@ class WidgetDetailTask extends StatelessWidget {
                               style: Theme.of(context).textTheme.subtitle2,
                             ),
                             Text(
-                              "${task!.dateBegin!.hour}h : ${task!.dateBegin!.minute}mn",
+                              "${hourBegin}h : ${minBegin}mn",
                               style: Theme.of(context).textTheme.subtitle1,
                             )
                           ],
@@ -183,7 +193,7 @@ class WidgetDetailTask extends StatelessWidget {
                               style: Theme.of(context).textTheme.subtitle2,
                             ),
                             Text(
-                              "${task!.dateEnd!.hour}h : ${task!.dateEnd!.minute}mn",
+                              "${hourEnd}h : ${minEnd}mn",
                               style: Theme.of(context).textTheme.subtitle1,
                             )
                           ],

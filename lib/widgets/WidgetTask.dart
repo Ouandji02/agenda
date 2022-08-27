@@ -36,7 +36,13 @@ class _WidgetTask extends State<WidgetTask> {
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     Task? indexTask = filterTask(
         selectChips, context.watch<TaskProvider>().task, context)[index!];
-    ;
+    final timeBegin = TimeOfDay(
+      hour: int.parse(indexTask!.dateBegin!.split(":")![0]),
+      minute: int.parse(indexTask.dateBegin!.split(":")![1]),
+    );
+    final timeEnd = TimeOfDay(
+        hour: int.parse(indexTask.dateEnd!.split(":")![0]),
+        minute: int.parse(indexTask.dateEnd!.split(":")![1]));
     return InkWell(
       onTap: () =>
           Navigator.pushNamed(context, "/details", arguments: indexTask),
@@ -90,13 +96,16 @@ class _WidgetTask extends State<WidgetTask> {
                           child: Row(
                             children: [
                               Text(
-                                getStatus(indexTask.dateBegin, TimeOfDay.now(),
-                                    indexTask.dateEnd),
+                                getStatus(
+                                  timeEnd,
+                                  TimeOfDay.now(),
+                                  timeEnd,
+                                ),
                                 style: Theme.of(context).textTheme.subtitle2,
                               ),
                               Spacer(),
                               Text(
-                                  "${(indexTask.dateBegin!.hour.toString() + ":" + indexTask.dateBegin!.minute.toString()).toString()} - ${(indexTask.dateEnd!.hour.toString() + ":" + indexTask.dateEnd!.minute.toString())}",
+                                  "${indexTask.dateBegin} - ${(indexTask.dateEnd)}",
                                   style: Theme.of(context).textTheme.subtitle2)
                             ],
                           ),
@@ -116,9 +125,13 @@ class _WidgetTask extends State<WidgetTask> {
                             valueColor: new AlwaysStoppedAnimation<Color>(
                                 Theme.of(context).primaryColor),
                             value: (getDiffHours(
-                                    TimeOfDay.now(), indexTask.dateBegin) /
+                                  TimeOfDay.now(),
+                                  timeBegin,
+                                ) /
                                 getDiffHours(
-                                    indexTask.dateEnd, indexTask.dateBegin)),
+                                  timeEnd,
+                                  timeBegin,
+                                )),
                           ),
                         ),
                         Container(
@@ -139,7 +152,7 @@ class _WidgetTask extends State<WidgetTask> {
                                 ),
                               ),
                               Text(
-                                "${getPercent(TimeOfDay.now(), indexTask.dateBegin, indexTask.dateEnd)} %",
+                                "${getPercent(TimeOfDay.now(), timeBegin, timeEnd)} %",
                                 style: TextStyle(
                                     fontSize: 17,
                                     color: Theme.of(context).accentColor),

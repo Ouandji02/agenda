@@ -18,11 +18,14 @@ dependencies:
   dotted_border: ^2.0.0+2
   google_fonts: ^2.1.0
   provider:
+  floor:
   intl:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  floor_generator:
+  build_runner:
   
   flutter_lints: ^2.0.0
 

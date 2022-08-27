@@ -14,8 +14,8 @@ class WidgetModalForm extends StatefulWidget {
 class _WidgetModalFormState extends State<WidgetModalForm> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController taskController = TextEditingController();
-  TimeOfDay? beginDateController;
-  TimeOfDay? endDateController;
+   TimeOfDay? beginDateController;
+   TimeOfDay? endDateController;
   TextEditingController descriptionController = TextEditingController();
 
   @override
@@ -108,7 +108,7 @@ class _WidgetModalFormState extends State<WidgetModalForm> {
                                   initialTime: TimeOfDay(hour: 0, minute: 0));
                               print("sdffffffffffffff ${pickedTime}");
                               setState(() {
-                                endDateController = pickedTime;
+                                endDateController = pickedTime!;
                               });
                             },
                             keyboardType: TextInputType.datetime,
@@ -160,8 +160,8 @@ class _WidgetModalFormState extends State<WidgetModalForm> {
                                 taskProvidder.setTask(
                                   Task(
                                     title: taskController.text,
-                                    dateBegin: beginDateController,
-                                    dateEnd: endDateController,
+                                    dateBegin: "${beginDateController!.hour}:${beginDateController!.minute}",
+                                    dateEnd: "${endDateController!.hour}:${endDateController!.minute}",
                                     message: descriptionController.text,
                                     dateSave: DateFormat("EEEE dd MMMM yyyy")
                                         .format(DateTime.now()),

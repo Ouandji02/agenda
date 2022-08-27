@@ -18,6 +18,16 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final args = ModalRoute.of(context)!.settings.arguments as Task;
+    final hourBegin = args!.dateBegin!.split(":")![0];
+    final minBegin = args!.dateBegin!.split(":")![1];
+    final hourEnd = args!.dateEnd!.split(":")![0];
+    final minEnd = args!.dateEnd!.split(":")![1];
+    final timeBegin = TimeOfDay(
+      hour: int.parse(hourBegin),
+      minute: int.parse(minBegin),
+    );
+    final timeEnd =
+        TimeOfDay(hour: int.parse(hourEnd), minute: int.parse(minEnd));
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -82,7 +92,7 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
                 top: size.height * .1,
                 left: size.width * .4,
                 child: Icon(
-                  getIcon(TimeOfDay.now(), args.dateBegin, args.dateEnd),
+                  getIcon(TimeOfDay.now(), timeBegin, timeEnd),
                   color: Colors.white,
                   size: size.width * .2,
                   shadows: [
