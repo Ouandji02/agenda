@@ -3,6 +3,7 @@ import 'package:flutter_application_1/Screen/DetailTaskScreen.dart';
 import 'package:flutter_application_1/Screen/MainScreen.dart';
 import 'package:flutter_application_1/Screen/FirstScreen.dart';
 import 'package:flutter_application_1/constants/Colors.dart';
+import 'package:flutter_application_1/database/database.dart';
 import 'package:flutter_application_1/provider/Task_Provider.dart';
 import 'package:flutter_application_1/provider/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,7 +11,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import 'Screen/LoginScreen.dart';
 
-void main() {
+void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => UserProvider()),

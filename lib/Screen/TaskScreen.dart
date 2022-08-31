@@ -90,7 +90,7 @@ class _TaskScreenState extends State<TaskScreen> {
           Expanded(
             child: filterTask(selectChips, context.watch<TaskProvider>().task,
                             context)
-                        .length !=
+                        ?.length !=
                     0
                 ? ListView.builder(
                     itemBuilder: (context, index) {
@@ -101,7 +101,7 @@ class _TaskScreenState extends State<TaskScreen> {
                     },
                     itemCount: filterTask(selectChips,
                             context.watch<TaskProvider>().task, context)
-                        .length,
+                        ?.length,
                   )
                 : Center(
                     child: Text("Aucune Tache pour le moment"),

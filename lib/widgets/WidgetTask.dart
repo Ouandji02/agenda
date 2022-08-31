@@ -35,7 +35,7 @@ class _WidgetTask extends State<WidgetTask> {
     Size size = MediaQuery.of(context).size;
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     Task? indexTask = filterTask(
-        selectChips, context.watch<TaskProvider>().task, context)[index!];
+        selectChips, context.watch<TaskProvider>().task, context)![index!];
     final timeBegin = TimeOfDay(
       hour: int.parse(indexTask!.dateBegin!.split(":")![0]),
       minute: int.parse(indexTask.dateBegin!.split(":")![1]),
@@ -73,7 +73,7 @@ class _WidgetTask extends State<WidgetTask> {
                     child: CircleAvatar(
                       backgroundColor: Theme.of(context).primaryColor,
                       child: Text(
-                        taskProvider.task[this.index!].title
+                        taskProvider.task![this.index!].title
                             .toString()
                             .substring(0, 2),
                       ),

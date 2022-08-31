@@ -23,11 +23,14 @@ class Dashboard extends StatefulWidget {
 
 class _Dashboard extends State<Dashboard> {
   String selectChips = "Tout";
-
+  @override
+  void initState() {
+    super.initState();
+    context.read<TaskProvider>().getAllTask();
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     return Scaffold(
       drawer: GlobalDrawer(),
       body: Container(
@@ -82,7 +85,7 @@ class _Dashboard extends State<Dashboard> {
             Expanded(
               child: filterTask(selectChips, context.watch<TaskProvider>().task,
                               context)
-                          .length !=
+                          ?.length !=
                       0
                   ? ListView.builder(
                       itemBuilder: (context, index) {
@@ -93,7 +96,7 @@ class _Dashboard extends State<Dashboard> {
                       },
                       itemCount: filterTask(selectChips,
                               context.watch<TaskProvider>().task, context)
-                          .length,
+                          ?.length,
                     )
                   : Center(
                       child: Text("Aucune Tache pour le moment"),

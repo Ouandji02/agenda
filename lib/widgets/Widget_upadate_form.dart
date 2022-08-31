@@ -4,14 +4,20 @@ import 'package:flutter_application_1/provider/Task_Provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class WidgetModalForm extends StatefulWidget {
-  const WidgetModalForm({Key? key}) : super(key: key);
+class WidgetUpdateForm extends StatefulWidget {
+  Task? task;
+
+  WidgetUpdateForm({required this.task});
 
   @override
-  State<WidgetModalForm> createState() => _WidgetModalFormState();
+  State<WidgetUpdateForm> createState() => _WidgetUpdateFormState(this.task);
 }
 
-class _WidgetModalFormState extends State<WidgetModalForm> {
+class _WidgetUpdateFormState extends State<WidgetUpdateForm> {
+  Task? _task;
+
+  _WidgetUpdateFormState(this._task);
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController taskController = TextEditingController();
   TimeOfDay? beginDateController;
@@ -59,10 +65,9 @@ class _WidgetModalFormState extends State<WidgetModalForm> {
                           child: TextFormField(
                             controller: taskController,
                             keyboardType: TextInputType.text,
-                            decoration: const InputDecoration(
+                            decoration:  InputDecoration(
                               prefixIcon: Icon(Icons.task),
-                              hintText: "Entrez votre tache",
-                              labelText: "Votre tache",
+                              hintText: "${_task!.title}",
                             ),
                             validator: (value) {
                               if (value!.isEmpty)
@@ -80,18 +85,16 @@ class _WidgetModalFormState extends State<WidgetModalForm> {
                                   context: context,
                                   initialTime: TimeOfDay(hour: 0, minute: 0));
                               print("sdffffffffffffff ${pickedTime}");
-                              setState(
-                                () {
-                                  beginDateController = pickedTime!;
-                                },
-                              );
+                              setState(() {
+                                beginDateController = pickedTime!;
+                              });
                             },
                             keyboardType: TextInputType.datetime,
                             decoration: InputDecoration(
                               prefixIcon: Icon(Icons.access_time_outlined),
                               hintText: beginDateController != null
                                   ? "${beginDateController!.hour}:${beginDateController!.minute}"
-                                  : "00:00",
+                                  : "${_task!.dateBegin}",
                             ),
                             validator: (value) {
                               if (beginDateController == null) {
@@ -109,18 +112,16 @@ class _WidgetModalFormState extends State<WidgetModalForm> {
                                   context: context,
                                   initialTime: TimeOfDay(hour: 0, minute: 0));
                               print("sdffffffffffffff ${pickedTime}");
-                              setState(
-                                () {
-                                  endDateController = pickedTime!;
-                                },
-                              );
+                              setState(() {
+                                endDateController = pickedTime!;
+                              });
                             },
                             keyboardType: TextInputType.datetime,
                             decoration: InputDecoration(
                               prefixIcon: Icon(Icons.timer_off_sharp),
                               hintText: endDateController != null
                                   ? "${endDateController!.hour}:${endDateController!.minute}"
-                                  : "00:00",
+                                  : "${_task!.dateEnd}",
                             ),
                             validator: (value) {
                               if (endDateController == null) {
@@ -137,8 +138,8 @@ class _WidgetModalFormState extends State<WidgetModalForm> {
                             textAlignVertical: TextAlignVertical.top,
                             controller: descriptionController,
                             keyboardType: TextInputType.multiline,
-                            decoration: const InputDecoration(
-                                hintText: "   Votre Description....",
+                            decoration:  InputDecoration(
+                                hintText: "   ${_task!.message}",
                                 hintStyle: TextStyle()),
                             validator: (value) {
                               return null;
@@ -174,13 +175,12 @@ class _WidgetModalFormState extends State<WidgetModalForm> {
                                   ),
                                 );
                                 Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    backgroundColor:
-                                        Theme.of(context).primaryColor,
-                                    content: Text("tache creee"),
-                                  ),
-                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                  content: Text("tache creee"),
+                                ));
                               }
                             },
                             child: const Text(
